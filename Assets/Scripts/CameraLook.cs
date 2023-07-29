@@ -5,14 +5,12 @@ using UnityEngine;
 public class CameraLook : MonoBehaviour
 {
     [SerializeField] [Range (3f, 100f)]float mouseSensetivity;
-    [SerializeField] GameObject weapon;
     [SerializeField] GameObject body;
+    [SerializeField] GameObject weapon;
     [SerializeField] GameObject head;
     private float xRotation = 0;
     private float yRotation = 0;
    
-
-    private float eulerX = 0;
     private float eulerY = 0;
 
     private bool isPaused = false;
@@ -27,16 +25,15 @@ public class CameraLook : MonoBehaviour
     {
         if (!isPaused) {
             xRotation = mouseSensetivity * Input.GetAxis("Mouse X") * Time.deltaTime;
-            yRotation = mouseSensetivity * -Input.GetAxis("Mouse Y") * Time.deltaTime;
+            yRotation = mouseSensetivity * Input.GetAxis("Mouse Y") * Time.deltaTime;
 
-            eulerX = (transform.rotation.eulerAngles.x + yRotation) % 360;
-            eulerY = (transform.rotation.eulerAngles.y + xRotation) % 360;
-
+            eulerY -= yRotation;
+            eulerY = Mathf.Clamp(eulerY, -90f, 90f);
             
-            transform.rotation = Quaternion.Euler(eulerX, eulerY, 0f);
-            weapon.transform.rotation = Quaternion.Euler(eulerX, eulerY, 0f);
-            head.transform.rotation = Quaternion.Euler(eulerX, eulerY, 0f);
-            body.transform.rotation = Quaternion.Euler(0f, eulerY, 0f);
+            transform.localRotation = Quaternion.Euler(eulerY, xRotation, 0f);
+            weapon.transform.localRotation = Quaternion.Euler(eulerY, xRotation, 0f);
+            head.transform.rotation = Quaternion.Euler(xRotation, eulerY, 0f);
+            body.transform.Rotate(Vector3.up * xRotation);
 
         }
         

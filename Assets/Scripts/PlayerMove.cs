@@ -4,21 +4,42 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    Rigidbody rb;
-
-    public float speed = 3f;
-
-    private void Start(){
-        rb = GetComponent<Rigidbody>();
+    CharacterController controller;
+    [Range (15f, 100f)]public float speed;
+    float gravity = -9.81f;
+    float jumpHeight = 3f;
 
 
+    [SerializeField] public Transform groundCheck;
+    float groundDistane = 0.4f;
+    [SerializeField] public LayerMask groundMask;
+
+    bool isGrounded;
+    Vector3 velocity;
+
+    void Start()
+    {
+        controller = GetComponent<CharacterController>();
     }
-
     void Update()
     {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistane, groundMask);
+        if (isGrounded && velocity.y < 0)
+            velocity.y = -2f;
+        
         float xMove = Input.GetAxisRaw("Horizontal");
         float zMove = Input.GetAxisRaw("Vertical");
-        rb.velocity = new Vector3(xMove, rb.velocity.y, zMove) * speed;
+
+        
+        Vector3 move = transform.right * xMove + transform.forward * zMove;
+        
+        controller.Move(move * speed * Time.deltaTime);
+
+        if (Input.GetButtonDown("Jump") && isGrounded)
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
     
 }

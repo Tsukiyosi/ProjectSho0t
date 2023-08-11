@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerGunSelector : MonoBehaviour
 {
-    #region Variables
+#region Variables
     [SerializeField] private GunType gun;
     [SerializeField] private Transform gunParent;
     [SerializeField] private List<GunConfiguration> guns;
     public GunConfiguration activeGun;
-    //[SerializeField] private PlayerIK inverseKinematics;
-    #endregion
+    
+#endregion
 
     #region Monobehaviour Callbacks
     void Start()

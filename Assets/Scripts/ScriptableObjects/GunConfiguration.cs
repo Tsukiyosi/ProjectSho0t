@@ -7,6 +7,7 @@ using UnityEngine.Pool;
 [CreateAssetMenu (fileName ="GunConfig", menuName ="Guns/Gun", order = 0)]
 public class GunConfiguration : ScriptableObject
 {
+#region Variables
     public GunType type;
     public string gunName;
     public GameObject modelPrefab;
@@ -21,7 +22,10 @@ public class GunConfiguration : ScriptableObject
     private float lastShootTime;
     private ParticleSystem shootSystem;
     private ObjectPool<TrailRenderer> TrailPool;
+    #endregion
 
+
+#region public methods
     public void Spawn( Transform parent, MonoBehaviour ActiveMonoBehaviour){
         this.activeMonoBehaviour = ActiveMonoBehaviour;
         lastShootTime = 0;
@@ -75,7 +79,9 @@ public class GunConfiguration : ScriptableObject
             }
         }
     }
+#endregion
 
+#region private methods
     private IEnumerator PlayTrail(Vector3 startPoint, Vector3 endPoint, RaycastHit hit){
         TrailRenderer instance = TrailPool.Get();
         instance.gameObject.SetActive(true);
@@ -118,3 +124,4 @@ public class GunConfiguration : ScriptableObject
         return trail;
     }
 }
+#endregion
